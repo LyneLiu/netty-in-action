@@ -41,10 +41,11 @@ public class EchoServer {
     private void start() {
         final EchoServerHandler serverHandler = new EchoServerHandler();
         /* 线程池的默认线程个数为当前服务器CPU核心数目的2倍 */
-        EventLoopGroup group = new NioEventLoopGroup();
+        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+        EventLoopGroup workerGroup = new NioEventLoopGroup(3);
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
-            bootstrap.group(group)
+            bootstrap.group(bossGroup,workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .localAddress(new InetSocketAddress(port))
                     .childHandler(new ChannelInitializer<SocketChannel>() {
@@ -58,7 +59,8 @@ public class EchoServer {
             e.printStackTrace();
         }finally {
             try {
-                group.shutdownGracefully().sync();
+                bossGroup.shutdownGracefully().sync();
+                workerGroup.shutdownGracefully().sync();
             } catch (InterruptedException e) {
                 // do nothing
             }
