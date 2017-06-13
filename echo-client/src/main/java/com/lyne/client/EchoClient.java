@@ -28,10 +28,15 @@ public class EchoClient {
             System.out.println("Usage: "+EchoClient.class.getSimpleName()+" <host> <port>");
         }
 
-        String host = args[0];
-        int port = Integer.parseInt(args[1]);
-        for (int i = 0; i < 50; i++) {
-            new EchoClient(host,port).start();
+        final String host = args[0];
+        final int port = Integer.parseInt(args[1]);
+        for (int i = 0; i < 1000; i++) {
+            Thread thread = new Thread("thread-"+i){
+                public void run(){
+                    new EchoClient(host,port).start();
+                }
+            };
+            thread.start();
         }
     }
 
