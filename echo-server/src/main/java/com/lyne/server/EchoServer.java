@@ -40,6 +40,7 @@ public class EchoServer {
      */
     private void start() {
         final EchoServerHandler serverHandler = new EchoServerHandler();
+        /* 线程池的默认线程个数为当前服务器CPU核心数目的2倍 */
         EventLoopGroup group = new NioEventLoopGroup();
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
