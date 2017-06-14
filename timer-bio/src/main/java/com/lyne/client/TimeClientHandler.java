@@ -31,10 +31,13 @@ public class TimeClientHandler implements Runnable {
             reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
             /* Note：需要添加换行符\n符号数据才能flush至server端 */
-            writer.print("GET CURRENT TIME\n");
-            writer.flush();
-            String response = reader.readLine();
-            logger.info("Current Time:" + response);
+            while (true){
+                writer.print("GET CURRENT TIME\n");
+                writer.flush();
+                String response = reader.readLine();
+                logger.info("Current Time:" + response);
+                Thread.sleep(5000);
+            }
 
         } catch (Exception e) {
             logger.error(ExceptionUtils.getStackTrace(e));

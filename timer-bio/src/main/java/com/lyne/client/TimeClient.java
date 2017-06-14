@@ -19,7 +19,7 @@ public class TimeClient {
         Socket client = null;
         try {
 
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 1; i++) {
                 client = new Socket("127.0.0.1", 8089);
                 new Thread(new TimeClientHandler(client),"ClientThread "+i).start();
             }

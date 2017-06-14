@@ -33,13 +33,15 @@ public class TimeServerHandler implements Runnable {
             reader = new BufferedReader(new InputStreamReader(clientProxy.getInputStream()));
             writer = new PrintWriter(clientProxy.getOutputStream());
 
-            String request = reader.readLine();
-            if (request == null || !request.equalsIgnoreCase("GET CURRENT TIME")){
-                writer.println("BAD REQUEST!");
-            }else {
-                writer.print(LocalDateTime.now().toString());
+            while (true){
+                String request = reader.readLine();
+                if (request == null || !request.equalsIgnoreCase("GET CURRENT TIME")){
+                    writer.println("BAD REQUEST!\n");
+                }else {
+                    writer.print(LocalDateTime.now().toString()+"\n");
+                }
+                writer.flush();
             }
-            writer.flush();
 
         } catch (Exception e) {
             logger.error(ExceptionUtils.getStackTrace(e));
