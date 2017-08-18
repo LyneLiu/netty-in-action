@@ -50,7 +50,18 @@ public class EchoClient {
                     .remoteAddress(new InetSocketAddress(host,port))
                     .handler(new ChannelInitializer<SocketChannel>() {
                         protected void initChannel(SocketChannel ch) throws Exception {
+                            /*
+                             * =============================================================
+                             * echo client handler 使用示例
+                             * =============================================================
+                             */
                             //ch.pipeline().addLast(new EchoClientHandler());
+
+                            /*
+                             * =============================================================
+                             * multi in and out client handler 使用示例
+                             * =============================================================
+                             */
                             ch.pipeline().addLast(new InAndOutClientHandler());
                         }
                     })

@@ -21,9 +21,6 @@ public class EchoServer {
 
     private final int port;
 
-    private final EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-    private final EventLoopGroup workerGroup = new NioEventLoopGroup(3);
-
     public EchoServer(int port) {
         this.port = port;
     }
@@ -53,8 +50,8 @@ public class EchoServer {
     private void start() {
         final EchoServerHandler serverHandler = new EchoServerHandler();
         /* 线程池的默认线程个数为当前服务器CPU核心数目的2倍 */
-        /*EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-        EventLoopGroup workerGroup = new NioEventLoopGroup(3);*/
+        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+        EventLoopGroup workerGroup = new NioEventLoopGroup(3);
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(bossGroup,workerGroup)
@@ -62,9 +59,19 @@ public class EchoServer {
                     .localAddress(new InetSocketAddress(port))
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         protected void initChannel(SocketChannel ch) throws Exception {
-                            //ch.pipeline().addLast(serverHandler);
                             /*
+                             * =============================================================
+                             * echo server handler 使用示例
+                             * =============================================================
+                             */
+                            //ch.pipeline().addLast(serverHandler);
+
+
+                            /*
+                             * =============================================================
+                             * multi in and out client handler 使用示例
                              * 注意：OutboundHandler在注册的时候需要放在最后一个InboundHandler之前，否则将无法传递到OutboundHandler！
+                             * =============================================================
                              */
                             // 注册两个OutboundHandler，执行顺序为注册顺序的逆序，所以应该是OutboundHandler2 OutboundHandler1
                             ch.pipeline().addLast(new EchoOutbountHandler1());
