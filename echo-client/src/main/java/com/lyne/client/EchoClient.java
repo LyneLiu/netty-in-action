@@ -3,6 +3,7 @@ package com.lyne.client;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -30,7 +31,7 @@ public class EchoClient {
 
         final String host = args[0];
         final int port = Integer.parseInt(args[1]);
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1; i++) {
             Thread thread = new Thread("thread-"+i){
                 public void run(){
                     new EchoClient(host,port).start();
@@ -49,9 +50,11 @@ public class EchoClient {
                     .remoteAddress(new InetSocketAddress(host,port))
                     .handler(new ChannelInitializer<SocketChannel>() {
                         protected void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new EchoClientHandler());
+                            //ch.pipeline().addLast(new EchoClientHandler());
+                            ch.pipeline().addLast(new InAndOutClientHandler());
                         }
-                    });
+                    })
+                    .option(ChannelOption.SO_KEEPALIVE, true);
             ChannelFuture future = bootstrap.connect().sync();
             future.channel().closeFuture().sync();
         }catch (Exception e){

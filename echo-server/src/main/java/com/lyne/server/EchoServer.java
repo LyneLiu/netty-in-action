@@ -4,6 +4,7 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -61,9 +62,20 @@ public class EchoServer {
                     .localAddress(new InetSocketAddress(port))
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         protected void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(serverHandler);
+                            //ch.pipeline().addLast(serverHandler);
+                            /*
+                             * 注意：OutboundHandler在注册的时候需要放在最后一个InboundHandler之前，否则将无法传递到OutboundHandler！
+                             */
+                            // 注册两个OutboundHandler，执行顺序为注册顺序的逆序，所以应该是OutboundHandler2 OutboundHandler1
+                            ch.pipeline().addLast(new EchoOutbountHandler1());
+                            ch.pipeline().addLast(new EchoOutbountHandler2());
+                            // 注册两个InboundHandler，执行顺序为注册顺序，所以应该是InboundHandler1 InboundHandler2
+                            ch.pipeline().addLast(new EchoInbountHandler1());
+                            ch.pipeline().addLast(new EchoInbountHandler2());
                         }
-                    });
+                    })
+                    .option(ChannelOption.SO_BACKLOG, 128)
+                    .childOption(ChannelOption.SO_KEEPALIVE, true); ;
             ChannelFuture future = bootstrap.bind().sync();
             // Wait until the server socket is closed.
             // In this example, this does not happen, but you can do that to gracefully
