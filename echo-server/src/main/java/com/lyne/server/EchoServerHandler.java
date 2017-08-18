@@ -30,7 +30,10 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter{
 
     public void channelReadComplete(ChannelHandlerContext ctx){
         ctx.writeAndFlush(Unpooled.EMPTY_BUFFER)
-                .addListener(ChannelFutureListener.CLOSE);  //将消息冲刷至远程节点，并关闭该channel
+                /* 执行该操作，会关闭server和client建立的channel，即使client端采取阻塞的方式 */
+                .addListener(ChannelFutureListener.CLOSE);  //将消息冲刷至远程节点，并关闭该channel，该操作会关闭当前的channel
+        // close the parent channel (the one attached to the bind)
+        // ctx.channel().parent().close();
     }
 
     /**

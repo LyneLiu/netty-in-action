@@ -20,6 +20,9 @@ public class EchoServer {
 
     private final int port;
 
+    private final EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+    private final EventLoopGroup workerGroup = new NioEventLoopGroup(3);
+
     public EchoServer(int port) {
         this.port = port;
     }
@@ -44,12 +47,13 @@ public class EchoServer {
      * 3、指定服务器绑定的本地的InetSocketAddress；
      * 4、使用一个EchoServerHandler的实例初始化每一个新的Channel；
      * 5、调用ServerBootstrap.bind()方法绑定服务器
+     *
      */
     private void start() {
         final EchoServerHandler serverHandler = new EchoServerHandler();
         /* 线程池的默认线程个数为当前服务器CPU核心数目的2倍 */
-        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-        EventLoopGroup workerGroup = new NioEventLoopGroup(3);
+        /*EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+        EventLoopGroup workerGroup = new NioEventLoopGroup(3);*/
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(bossGroup,workerGroup)
@@ -64,7 +68,7 @@ public class EchoServer {
             // Wait until the server socket is closed.
             // In this example, this does not happen, but you can do that to gracefully
             // shut down your server.
-            future.channel().closeFuture().sync();
+            future.channel().closeFuture().awaitUninterruptibly();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
