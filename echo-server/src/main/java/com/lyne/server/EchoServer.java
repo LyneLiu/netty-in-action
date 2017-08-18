@@ -1,5 +1,6 @@
 package com.lyne.server;
 
+import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -7,6 +8,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.concurrent.Future;
 
 import java.net.InetSocketAddress;
 
@@ -27,7 +30,11 @@ public class EchoServer {
         }
 
         int port = Integer.parseInt(args[0]);
-        new EchoServer(port).start();
+        EchoServer server = new EchoServer(port);
+        server.start();
+
+        // 阻塞线程，所以无法执行到stop操作
+        server.stop();
     }
 
     /**
@@ -54,16 +61,34 @@ public class EchoServer {
                         }
                     });
             ChannelFuture future = bootstrap.bind().sync();
+            // Wait until the server socket is closed.
+            // In this example, this does not happen, but you can do that to gracefully
+            // shut down your server.
             future.channel().closeFuture().sync();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
             try {
+                System.out.println("Closing echo server...");
                 bossGroup.shutdownGracefully().sync();
                 workerGroup.shutdownGracefully().sync();
             } catch (InterruptedException e) {
                 // do nothing
             }
+        }
+    }
+
+    public void stop(){
+        EventLoopGroup group = new NioEventLoopGroup(); //1
+        Bootstrap bootstrap = new Bootstrap(); //2
+        bootstrap.group(group)
+                .channel(NioSocketChannel.class);
+        Future<?> future = group.shutdownGracefully(); //3
+        // block until the group has shutdown
+        try {
+            future.sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

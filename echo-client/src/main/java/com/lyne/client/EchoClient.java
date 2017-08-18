@@ -58,6 +58,7 @@ public class EchoClient {
             e.printStackTrace();
         }finally {
             try {
+                System.out.println("Closing echo client ...");
                 group.shutdownGracefully().sync();
             } catch (InterruptedException e) {
                 // do nothing
