@@ -16,8 +16,6 @@ public class EchoOutbountHandler1 extends ChannelOutboundHandlerAdapter {
 
     private final static Logger logger = LoggerFactory.getLogger(EchoOutbountHandler1.class);
 
-
-
     /**
      * 向client发送消息
      * @param ctx

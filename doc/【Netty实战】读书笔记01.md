@@ -20,6 +20,8 @@ Java 早期版本(1995-2002)介绍了足够的面向对象的糖衣来隐藏一�
 
 2. ServerBootstrap用来绑定本地端口，有2个EventLoopGroup(parentGroup和childGroup)。
 
+![](https://waylau.gitbooks.io/essential-netty-in-action/images/Figure%203.2%20Server%20with%20two%20EventLoopGroups.jpg)
+
 
 **1.  问题：**
 > echo server和echo client的demo中如何优雅地退出netty server呢？
