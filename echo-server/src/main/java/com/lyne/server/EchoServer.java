@@ -1,5 +1,6 @@
 package com.lyne.server;
 
+import com.lyne.LogUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -92,7 +93,7 @@ public class EchoServer {
             e.printStackTrace();
         }finally {
             try {
-                System.out.println("Closing echo server...");
+                LogUtil.info("Closing echo server...");
                 bossGroup.shutdownGracefully().sync();
                 workerGroup.shutdownGracefully().sync();
             } catch (InterruptedException e) {

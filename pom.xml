@@ -8,9 +8,10 @@
   <packaging>pom</packaging>
 
   <modules>
+    <module>timer-bio</module>
+    <module>echo-common</module>
     <module>echo-server</module>
     <module>echo-client</module>
-      <module>timer-bio</module>
   </modules>
 
   <name>netty-in-action</name>

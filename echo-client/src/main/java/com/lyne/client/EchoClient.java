@@ -1,5 +1,6 @@
 package com.lyne.client;
 
+import com.lyne.LogUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -72,7 +73,7 @@ public class EchoClient {
             e.printStackTrace();
         }finally {
             try {
-                System.out.println("Closing echo client ...");
+                LogUtil.info("Closing echo client ...");
                 group.shutdownGracefully().sync();
             } catch (InterruptedException e) {
                 // do nothing

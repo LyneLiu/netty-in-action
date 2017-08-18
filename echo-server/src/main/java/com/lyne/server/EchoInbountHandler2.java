@@ -1,10 +1,9 @@
 package com.lyne.server;
 
+import com.lyne.LogUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author nn_liu
@@ -13,12 +12,10 @@ import org.slf4j.LoggerFactory;
 
 public class EchoInbountHandler2 extends ChannelInboundHandlerAdapter {
 
-    private final static Logger logger = LoggerFactory.getLogger(EchoInbountHandler2.class);
-
     @Override
     // 读取Client发送的信息，并打印出来
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        System.out.println(">>>>>EchoInbountHandler2.channelRead: ctx :" + ctx);
+        LogUtil.info(">>>>>EchoInbountHandler2.channelRead: ctx :" + ctx);
         ByteBuf result = (ByteBuf) msg;
         byte[] result1 = new byte[result.readableBytes()];
         result.readBytes(result1);
@@ -31,7 +28,7 @@ public class EchoInbountHandler2 extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        System.out.println(">>>>>EchoInbountHandler2.channelReadComplete");
+        LogUtil.info(">>>>>EchoInbountHandler2.channelReadComplete");
         ctx.flush();
     }
 

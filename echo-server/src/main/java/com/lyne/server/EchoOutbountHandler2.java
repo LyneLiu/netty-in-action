@@ -1,12 +1,9 @@
 package com.lyne.server;
 
-import io.netty.buffer.ByteBuf;
+import com.lyne.LogUtil;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelOutboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author nn_liu
@@ -15,11 +12,9 @@ import org.slf4j.LoggerFactory;
 
 public class EchoOutbountHandler2 extends ChannelOutboundHandlerAdapter {
 
-    private final static Logger logger = LoggerFactory.getLogger(EchoOutbountHandler2.class);
-
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-        System.out.println(">>>>>EchoOutbountHandler2.write");
+        LogUtil.info(">>>>>EchoOutbountHandler2.write");
         // 执行下一个OutboundHandler
         super.write(ctx, msg, promise);
     }

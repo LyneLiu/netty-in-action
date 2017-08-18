@@ -1,5 +1,6 @@
 package com.lyne.client;
 
+import com.lyne.LogUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -16,7 +17,7 @@ public class EchoClientHandler extends SimpleChannelInboundHandler<ByteBuf> {
     }
 
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-        System.out.println("Client received: " + msg.toString(CharsetUtil.UTF_8));
+        LogUtil.info("Client received: " + msg.toString(CharsetUtil.UTF_8));
     }
 
     /**
