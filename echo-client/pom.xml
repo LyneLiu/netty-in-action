@@ -23,7 +23,6 @@
         <dependency>
             <groupId>com.lyne</groupId>
             <artifactId>echo-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
